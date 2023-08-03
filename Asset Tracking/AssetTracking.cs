@@ -11,7 +11,7 @@ namespace Asset_Tracking
     internal class AssetTracking
     {
         //List of tracking Items in the Database
-        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", new DateTime(2020, 10, 2), decimal.Parse("123,678")), 
+        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", new DateTime(2020, 10, 2), decimal.Parse("123,678")),
                                             new Phone("HP", "Elitebook", "Spain", new DateTime(2020, 6, 1), decimal.Parse("123,678")),
                                             new Phone("iPhone", "8", "Spain", new DateTime(2018, 12, 29), decimal.Parse("970")),
                                             new Computer("HP", "Elitebook", "Spain", new DateTime(2019, 6, 1), decimal.Parse("1423")),
@@ -33,7 +33,6 @@ namespace Asset_Tracking
         String modelMsg = "Enter Model | To quit - enter 'Q': ";
         String priceMsg = "Enter Price ex. 1234,5 | To quit - enter 'Q': ";
         String wrongChoiceMsg = "Wrong choice, try again:";
-        String priceWholeNumberMsg = "Price must be a number ex. 1234,5";
         String tableHeader = "------------------------------------------------------------------------------------------------------------------------";
         String tableCategories = "Type".PadRight(paddingSize) + "Brand".PadRight(paddingSize) + "Model".PadRight(paddingSize) + "Office".PadRight(paddingSize) + "Purchased".PadRight(paddingSize) +
             "Price USD".PadRight(paddingSize) + "Currency".PadRight(paddingSize) + "Local Price".PadRight(paddingSize);
@@ -69,15 +68,14 @@ namespace Asset_Tracking
         }
 
         /*
-   * Generates a table with all of the products in the product list, sorted by price, with sum 
-   * 
-   */
+         * Generates a table with all of the products in the product list, sorted by price, with sum 
+         */
         private void showProductTable()
         {
             printMsg(tableHeader);
             printMsg(tableCategories, Color.GREEN);
-            items = items.OrderBy(item => item.Office).ThenBy(item => item.Purchased.Date).ToList();
-
+            List<Item> tempList = items.OrderBy(item => item.Office).ThenBy(item => item.Purchased.Date).ToList();
+            items = tempList;
             //background color according to timestamp vals
             foreach (Item item in items)
             {
@@ -85,17 +83,16 @@ namespace Asset_Tracking
                 DateTime threeYears = item.Purchased.Date.AddYears(3);
                 TimeSpan timeSpan = today - threeYears;
                 int difference = Convert.ToInt32(Math.Floor(timeSpan.TotalDays));
-                Console.WriteLine(difference);
                 if (difference <= 90 && difference > 0)
                 {
-                    
+
                     printMsg(item.toString(), Color.YELLOW);
                 }
                 else if (difference > 90)
                 {
                     printMsg(item.toString(), Color.RED);
                 }
-                
+
                 else
                 {
                     printMsg(item.toString());
@@ -117,8 +114,8 @@ namespace Asset_Tracking
         }
 
         /*
-   * Adds a product to the list, exits and shows products table otherwise
-   */
+         * Adds a product to the list, exits and shows products table otherwise
+         */
         private void addProductLoop()
         {
             while (!exitProductLoop)
@@ -259,11 +256,11 @@ namespace Asset_Tracking
                                 purchased = DateTime.Parse(input);
                                 wrongInput = false;
                             }
-                            catch (ArgumentNullException e)
+                            catch (ArgumentNullException)
                             {
                                 printMsg("Date cant be empty", Color.RED);
                             }
-                            catch (FormatException e)
+                            catch (FormatException)
                             {
                                 printMsg("Date has wrong format", Color.RED);
                             }
@@ -291,15 +288,15 @@ namespace Asset_Tracking
                                 priceUSD = decimal.Parse(input);
                                 wrongInput = false;
                             }
-                            catch (ArgumentNullException e)
+                            catch (ArgumentNullException)
                             {
                                 printMsg("Price cant be empty", Color.RED);
                             }
-                            catch (FormatException e)
+                            catch (FormatException)
                             {
                                 printMsg("Price has wrong format", Color.RED);
                             }
-                            catch (OverflowException e)
+                            catch (OverflowException)
                             {
                                 printMsg("Price is to big", Color.RED);
                             }

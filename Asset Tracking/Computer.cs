@@ -15,7 +15,7 @@ namespace Asset_Tracking
 
         public override string toString()
         {
-            return Type.PadRight(paddingSize) + Brand.PadRight(paddingSize) + Model.PadRight(paddingSize) + Office.PadRight(paddingSize) + Purchased.Date.ToString("dd-MM-yyyy").PadRight(paddingSize) +
+            return Type.PadRight(paddingSize) + Brand.PadRight(paddingSize) + Model.PadRight(paddingSize) + Office.PadRight(paddingSize) + Purchased.Date.ToString("yyy-MM-dd").PadRight(paddingSize) +
                 PriceUSD.ToString().PadRight(paddingSize) + Currency.PadRight(paddingSize) + LocalPrice.ToString().PadRight(paddingSize);
         }
     }
