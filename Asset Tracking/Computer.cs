@@ -8,11 +8,9 @@ namespace Asset_Tracking
 {
     internal class Computer : Item
     {
-        public Computer() { }
         public Computer(String brand, String model, String office, DateTime purchased, Decimal priceUSD) : base(brand, model, office, purchased, priceUSD)
         {
             Type = "Computer";
-
         }
 
         public override string toString()

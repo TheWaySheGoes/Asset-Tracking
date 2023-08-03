@@ -11,7 +11,18 @@ namespace Asset_Tracking
     internal class AssetTracking
     {
         //List of tracking Items in the Database
-        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", DateTime.Now.Date, decimal.Parse("123,678")), new Phone("HP", "Elitebook", "Spain", DateTime.Now.Date, decimal.Parse("123,678")) };
+        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", DateTime.Parse("02-10-2020"), decimal.Parse("123,678")), 
+                                            new Phone("HP", "Elitebook", "Spain", DateTime.Parse("05-06-2020"), decimal.Parse("123,678")),
+                                            new Phone("iPhone", "8", "Spain", new DateTime(2018, 12, 29), decimal.Parse("970")),
+                                            new Computer("HP", "Elitebook", "Spain", new DateTime(2019, 6, 1), decimal.Parse("1423")),
+                                            new Phone("iPhone", "11", "Spain", new DateTime(2022, 6, 25), decimal.Parse("990")),
+                                            new Phone("iPhone", "X", "Sweden", new DateTime(2018, 7, 15), decimal.Parse("1245")),
+                                            new Phone("Motorola", "Razr", "Sweden", new DateTime(2022, 12, 16), decimal.Parse("970")),
+                                            new Computer("HP", "Elitebook", "Sweden", new DateTime(2023, 10, 2), decimal.Parse("588")),
+                                            new Computer("Asus", "W234", "USA", new DateTime(2017, 4, 21), decimal.Parse("1200")),
+                                            new Computer("Lenovo", "Yoga 730", "USA", new DateTime(2018, 5, 28), decimal.Parse("835")),
+                                            new Computer("Lenovo", "Yoga 530", "USA", new DateTime(2019, 5, 21), decimal.Parse("1030"))
+                                            };
         static int paddingSize = 12;
         String exitOrTypeMsg = "Enter Type\n - 1 for Computer\n - 2 for Phone\n - Q for Exit";
         String exitOrProductOrSearchMsg = "To enter a new product enter 'P' | To quit - enter: 'Q' ";
@@ -23,10 +34,10 @@ namespace Asset_Tracking
         String priceMsg = "Enter Price ex. 1234,5 | To quit - enter 'Q': ";
         String wrongChoiceMsg = "Wrong choice, try again:";
         String priceWholeNumberMsg = "Price must be a number ex. 1234,5";
-        String tableHeader = "------------------------------------------------------------";
+        String tableHeader = "------------------------------------------------------------------------------------------------------------------------";
         String tableCategories = "Type".PadRight(paddingSize) + "Brand".PadRight(paddingSize) + "Model".PadRight(paddingSize) + "Office".PadRight(paddingSize) + "Purchased".PadRight(paddingSize) +
             "Price USD".PadRight(paddingSize) + "Currency".PadRight(paddingSize) + "Local Price".PadRight(paddingSize);
-        String tableFooter = "------------------------------------------------------------";
+        String tableFooter = "------------------------------------------------------------------------------------------------------------------------";
         bool exitProductLoop = false;
         bool exitMainLoop = false;
         LoopType loopType = LoopType.SHOW_PRODUCT_TABLE;
@@ -65,11 +76,34 @@ namespace Asset_Tracking
         {
             printMsg(tableHeader);
             printMsg(tableCategories, Color.GREEN);
-            items.OrderBy(item => item.Office).ToList().OrderBy(item => item.Purchased).ToList().ForEach(item => printMsg(item.toString()));   //TODO color code for dates
+            items.OrderBy(item => item.Office).ThenBy(item => item.Purchased).ToList();
+            //background color according to timstamp vals
+            foreach (Item item in items)
+            {
+                DateTime today = DateTime.Now.Date;
+                DateTime threeYears = item.Purchased.Date.AddYears(3);
+                TimeSpan timeSpan = today - threeYears;
+                int difference = Convert.ToInt32(Math.Abs(Math.Floor(timeSpan.TotalDays)));
+                Console.WriteLine(difference);
+                if (difference > 180)
+                {
+                    
+                    printMsg(item.toString(), Color.RED);
+                }
+                else if (difference > 90)
+                {
+                    printMsg(item.toString(), Color.YELLOW);
+                }
+                
+                else
+                {
+                    printMsg(item.toString());
+                }
+            }
+
             printMsg(tableFooter);
             printMsg(exitOrProductOrSearchMsg, Color.BLUE);
             String input = Console.ReadLine();
-
             if (input == showProductsKeyWord)
             {
                 loopType = LoopType.PRODUCTS;
@@ -274,7 +308,7 @@ namespace Asset_Tracking
 
                 if (!exitProductLoop)
                 {
-                    if(type == "Computer")
+                    if (type == "Computer")
                     {
                         items.Add(new Computer(brand, model, office, purchased, priceUSD));
                     }
