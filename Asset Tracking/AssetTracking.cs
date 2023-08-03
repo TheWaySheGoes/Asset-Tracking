@@ -68,7 +68,7 @@ namespace Asset_Tracking
         }
 
         /*
-         * Generates a table with all of the products in the product list, sorted by price, with sum 
+         * Generates a table with all of the products in the product list, sorted by office, and date  
          */
         private void showProductTable()
         {
