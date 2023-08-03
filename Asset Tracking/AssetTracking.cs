@@ -21,6 +21,7 @@ namespace Asset_Tracking
         String officeMsg = "Enter office\n - 1 for Spain\n - 2 for Sweden\n - 3 for USA";
         String modelMsg = "Enter Model: ";
         String priceMsg = "Enter Price: ";
+        String wrongChoiceMsg = "Wrong choice, try again:";
         String priceWholeNumberMsg = "Price must be a number ex. 1234,5";
         String tableHeader = "------------------------------------------------------------";
         String tableCategories = "Type".PadRight(paddingSize) + "Brand".PadRight(paddingSize) + "Model".PadRight(paddingSize) + "Office".PadRight(paddingSize) + "Purchased".PadRight(paddingSize) +
@@ -28,11 +29,9 @@ namespace Asset_Tracking
         String tableFooter = "------------------------------------------------------------";
         bool exitProductLoop = false;
         bool exitMainLoop = false;
-        bool exitSearchLoop = false;
         LoopType loopType = LoopType.SHOW_PRODUCT_TABLE;
         String showProductsKeyWord = "P";
         String quitKeyWord = "Q";
-        String searchKeyWord = "S";
 
 
         /*
@@ -67,9 +66,7 @@ namespace Asset_Tracking
             printMsg(tableHeader);
             printMsg(tableCategories, Color.GREEN);
             items.OrderBy(item => item.Office).ToList().OrderBy(item => item.Purchased).ToList().ForEach(item => printMsg(item.toString()));   //TODO color code for dates
-            //products.OrderBy(product => product.Price).ToList().ForEach(product => printMsg(product.toString()));
             printMsg(tableFooter);
-            //Console.WriteLine(products.Sum(product => product.Price).ToString().PadLeft(60));
             printMsg(exitOrProductOrSearchMsg, Color.BLUE);
             String input = Console.ReadLine();
 
@@ -110,6 +107,7 @@ namespace Asset_Tracking
                     if (isExitProductsLoop(input, quitKeyWord))
                     {
                         exitProductLoop = true;
+                        wrongInput = false;
                     }
                     else if (!exitProductLoop)
                     {
@@ -123,6 +121,9 @@ namespace Asset_Tracking
                             case "2":
                                 type = new Phone();
                                 wrongInput = false;
+                                break;
+                            default:
+                                printMsg(wrongChoiceMsg, Color.RED);
                                 break;
                         }
                     }
@@ -165,11 +166,12 @@ namespace Asset_Tracking
                 {
                     if (!exitProductLoop)
                     {
-                        Console.Write(officeMsg);
+                        printMsg(officeMsg, Color.CYAN);
                         input = Console.ReadLine().Trim();
                         if (isExitProductsLoop(input, quitKeyWord))
                         {
                             exitProductLoop = true;
+                            wrongInput = false;
                         }
                         else if (!exitProductLoop)
                         {
@@ -199,7 +201,7 @@ namespace Asset_Tracking
                 //add purchase date or exit
                 if (!exitProductLoop)
                 {
-                    Console.Write(dateMsg);
+                    printMsg(dateMsg, Color.CYAN);
                     input = Console.ReadLine().Trim();
                     if (isExitProductsLoop(input, quitKeyWord))
                     {
@@ -213,6 +215,7 @@ namespace Asset_Tracking
                             try
                             {
                                 purchased = DateTime.Parse(input);
+                                repeat = false;
                             }
                             catch (ArgumentNullException e)
                             {
@@ -221,10 +224,6 @@ namespace Asset_Tracking
                             catch (FormatException e)
                             {
                                 printMsg("Date has wrong format", Color.RED);
-                            }
-                            finally
-                            {
-                                repeat = false;
                             }
                         }
                     }
@@ -247,6 +246,7 @@ namespace Asset_Tracking
                             try
                             {
                                 priceUSD = decimal.Parse(input);
+                                repeat = false;
                             }
                             catch (ArgumentNullException e)
                             {
@@ -259,10 +259,6 @@ namespace Asset_Tracking
                             catch (OverflowException e)
                             {
                                 printMsg("Price is to big", Color.RED);
-                            }
-                            finally
-                            {
-                                repeat = false;
                             }
                         }
                     }
@@ -301,33 +297,37 @@ namespace Asset_Tracking
          * After that goes back to default white.
          * 
          */
-        private void printMsg(String msg, Color color = Color.WHITE)
+        private void printMsg(String msg, Color color = Color.WHITE, bool newLine = true)
         {
             switch (color)
             {
                 case Color.WHITE:
-                    Console.WriteLine(msg);
+                    Console.ForegroundColor = ConsoleColor.Green;
                     break;
                 case Color.GREEN:
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine(msg);
                     break;
                 case Color.BLUE:
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine(msg);
                     break;
                 case Color.YELLOW:
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine(msg);
                     break;
                 case Color.CYAN:
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine(msg);
-                    break;
+                     break;
                 case Color.RED:
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(msg);
                     break;
+            }
+
+            if (newLine)
+            {
+                Console.WriteLine(msg);
+            }
+            else
+            {
+                Console.Write(msg);
             }
 
             if (Console.ForegroundColor != ConsoleColor.White)
