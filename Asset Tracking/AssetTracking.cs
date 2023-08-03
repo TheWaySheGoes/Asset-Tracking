@@ -11,8 +11,8 @@ namespace Asset_Tracking
     internal class AssetTracking
     {
         //List of tracking Items in the Database
-        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", DateTime.Parse("02-10-2020"), decimal.Parse("123,678")), 
-                                            new Phone("HP", "Elitebook", "Spain", DateTime.Parse("05-06-2020"), decimal.Parse("123,678")),
+        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", new DateTime(2020, 10, 2), decimal.Parse("123,678")), 
+                                            new Phone("HP", "Elitebook", "Spain", new DateTime(2020, 6, 1), decimal.Parse("123,678")),
                                             new Phone("iPhone", "8", "Spain", new DateTime(2018, 12, 29), decimal.Parse("970")),
                                             new Computer("HP", "Elitebook", "Spain", new DateTime(2019, 6, 1), decimal.Parse("1423")),
                                             new Phone("iPhone", "11", "Spain", new DateTime(2022, 6, 25), decimal.Parse("990")),
@@ -76,23 +76,24 @@ namespace Asset_Tracking
         {
             printMsg(tableHeader);
             printMsg(tableCategories, Color.GREEN);
-            items.OrderBy(item => item.Office).ThenBy(item => item.Purchased).ToList();
-            //background color according to timstamp vals
+            items = items.OrderBy(item => item.Office).ThenBy(item => item.Purchased.Date).ToList();
+
+            //background color according to timestamp vals
             foreach (Item item in items)
             {
                 DateTime today = DateTime.Now.Date;
                 DateTime threeYears = item.Purchased.Date.AddYears(3);
                 TimeSpan timeSpan = today - threeYears;
-                int difference = Convert.ToInt32(Math.Abs(Math.Floor(timeSpan.TotalDays)));
+                int difference = Convert.ToInt32(Math.Floor(timeSpan.TotalDays));
                 Console.WriteLine(difference);
-                if (difference > 180)
+                if (difference <= 90 && difference > 0)
                 {
                     
-                    printMsg(item.toString(), Color.RED);
+                    printMsg(item.toString(), Color.YELLOW);
                 }
                 else if (difference > 90)
                 {
-                    printMsg(item.toString(), Color.YELLOW);
+                    printMsg(item.toString(), Color.RED);
                 }
                 
                 else
