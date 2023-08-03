@@ -21,7 +21,6 @@ namespace Asset_Tracking
         internal String Currency { get; set; }
         internal Decimal LocalPrice { get; set; }
 
-        protected Item() { }
         protected Item(string brand, string model, string office, DateTime purchased, Decimal priceUSD)
         {
             Brand = brand;
@@ -29,14 +28,14 @@ namespace Asset_Tracking
             Office = office;
             Purchased = purchased;
             PriceUSD = priceUSD;
-            Currency = setCurrency(office);
+            Currency = setOfficeCurrency(office);
             LocalPrice = convertToLocalPrice(priceUSD, Currency);
         }
 
         /*
          *Sets Currency based on the office the Item is in.
          */
-        private String setCurrency(String office)
+        private String setOfficeCurrency(String office)
         {
             String outCurrency = "";
 

@@ -14,13 +14,13 @@ namespace Asset_Tracking
         List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", DateTime.Now.Date, decimal.Parse("123,678")), new Phone("HP", "Elitebook", "Spain", DateTime.Now.Date, decimal.Parse("123,678")) };
         static int paddingSize = 12;
         String exitOrTypeMsg = "Enter Type\n - 1 for Computer\n - 2 for Phone\n - Q for Exit";
-        String exitOrProductOrSearchMsg = "To enter a new product enter 'P' | To quit - enter: 'Q'";
+        String exitOrProductOrSearchMsg = "To enter a new product enter 'P' | To quit - enter: 'Q' ";
         String categoryMsg = "Enter Category: ";
-        String brandMsg = "Enter Brand: ";
-        String dateMsg = "Enter purchase date in format dd-MM-yyyy: ";
-        String officeMsg = "Enter office\n - 1 for Spain\n - 2 for Sweden\n - 3 for USA";
-        String modelMsg = "Enter Model: ";
-        String priceMsg = "Enter Price ex. 1234,5: ";
+        String brandMsg = "Enter Brand | To quit - enter 'Q': ";
+        String dateMsg = "Enter purchase date in format dd-MM-yyyy | To quit - enter: 'Q' ";
+        String officeMsg = "Enter office\n - 1 for Spain\n - 2 for Sweden\n - 3 for USA\n - Q for Exit ";
+        String modelMsg = "Enter Model | To quit - enter 'Q': ";
+        String priceMsg = "Enter Price ex. 1234,5 | To quit - enter 'Q': ";
         String wrongChoiceMsg = "Wrong choice, try again:";
         String priceWholeNumberMsg = "Price must be a number ex. 1234,5";
         String tableHeader = "------------------------------------------------------------";
@@ -78,6 +78,7 @@ namespace Asset_Tracking
             {
                 exitMainLoop = true;
             }
+            else { }
         }
 
         /*
@@ -85,10 +86,9 @@ namespace Asset_Tracking
    */
         private void addProductLoop()
         {
-            exitProductLoop = true;
             while (!exitProductLoop)
             {
-                Item type = null;
+                String type = null;
                 String brand = null;
                 String model = null;
                 String office = null;
@@ -114,11 +114,11 @@ namespace Asset_Tracking
                         switch (input)
                         {
                             case "1":
-                                type = new Computer();
+                                type = "Computer";
                                 wrongInput = false;
                                 break;
                             case "2":
-                                type = new Phone();
+                                type = "Phone";
                                 wrongInput = false;
                                 break;
                             default:
@@ -190,6 +190,9 @@ namespace Asset_Tracking
                                     office = "USA";
                                     wrongInput = false;
                                     break;
+                                default:
+                                    printMsg(wrongChoiceMsg, Color.RED);
+                                    break;
                             }
                         }
                     }
@@ -211,6 +214,7 @@ namespace Asset_Tracking
                         if (isExitProductsLoop(input, quitKeyWord))
                         {
                             exitProductLoop = true;
+                            wrongInput = false;
                         }
                         else if (!exitProductLoop)
                         {
@@ -270,15 +274,18 @@ namespace Asset_Tracking
 
                 if (!exitProductLoop)
                 {
-                    type.Brand = brand;
-                    type.Model = model;
-                    type.Office = office;
-                    type.Purchased = purchased;
-                    type.PriceUSD = priceUSD;
+                    if(type == "Computer")
+                    {
+                        items.Add(new Computer(brand, model, office, purchased, priceUSD));
+                    }
+                    else if (type == "Phone")
+                    {
+                        items.Add(new Phone(brand, model, office, purchased, priceUSD));
+                    }
+                    exitProductLoop = true;
                 }
-
             }
-            exitProductLoop = true;
+            exitProductLoop = false;
             loopType = LoopType.SHOW_PRODUCT_TABLE;
         }
 
