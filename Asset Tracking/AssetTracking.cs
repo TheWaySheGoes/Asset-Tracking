@@ -33,10 +33,10 @@ namespace Asset_Tracking
         String modelMsg = "Enter Model | To quit - enter 'Q': ";
         String priceMsg = "Enter Price ex. 1234,5 | To quit - enter 'Q': ";
         String wrongChoiceMsg = "Wrong choice, try again:";
-        String tableHeader = "------------------------------------------------------------------------------------------------------------------------";
+        String tableHeader = "-------------------------------------------------------------------------------------------------";
         String tableCategories = "Type".PadRight(paddingSize) + "Brand".PadRight(paddingSize) + "Model".PadRight(paddingSize) + "Office".PadRight(paddingSize) + "Purchased".PadRight(paddingSize) +
             "Price USD".PadRight(paddingSize) + "Currency".PadRight(paddingSize) + "Local Price".PadRight(paddingSize);
-        String tableFooter = "------------------------------------------------------------------------------------------------------------------------";
+        String tableFooter = "-------------------------------------------------------------------------------------------------";
         bool exitProductLoop = false;
         bool exitMainLoop = false;
         LoopType loopType = LoopType.SHOW_PRODUCT_TABLE;
