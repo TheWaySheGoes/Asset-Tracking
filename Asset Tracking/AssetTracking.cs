@@ -20,7 +20,7 @@ namespace Asset_Tracking
         String dateMsg = "Enter purchase date in format dd-MM-yyyy: ";
         String officeMsg = "Enter office\n - 1 for Spain\n - 2 for Sweden\n - 3 for USA";
         String modelMsg = "Enter Model: ";
-        String priceMsg = "Enter Price: ";
+        String priceMsg = "Enter Price ex. 1234,5: ";
         String wrongChoiceMsg = "Wrong choice, try again:";
         String priceWholeNumberMsg = "Price must be a number ex. 1234,5";
         String tableHeader = "------------------------------------------------------------";
@@ -78,8 +78,6 @@ namespace Asset_Tracking
             {
                 exitMainLoop = true;
             }
-            //TODO exit
-            else { }
         }
 
         /*
@@ -87,6 +85,7 @@ namespace Asset_Tracking
    */
         private void addProductLoop()
         {
+            exitProductLoop = true;
             while (!exitProductLoop)
             {
                 Item type = null;
@@ -101,8 +100,8 @@ namespace Asset_Tracking
                 bool wrongInput = true;
                 while (wrongInput)
                 {
-                    printMsg(exitOrTypeMsg, Color.YELLOW);
-                    Console.Write(categoryMsg);
+                    printMsg(exitOrTypeMsg, Color.CYAN);
+                    printMsg(categoryMsg, Color.WHITE);
                     input = Console.ReadLine().Trim();
                     if (isExitProductsLoop(input, quitKeyWord))
                     {
@@ -131,7 +130,7 @@ namespace Asset_Tracking
                 //add brand name or exit
                 if (!exitProductLoop)
                 {
-                    Console.Write(brandMsg);
+                    printMsg(brandMsg, Color.CYAN, false);
                     input = Console.ReadLine().Trim();
                     if (isExitProductsLoop(input, quitKeyWord))
                     {
@@ -147,7 +146,7 @@ namespace Asset_Tracking
                 //add model name or exit
                 if (!exitProductLoop)
                 {
-                    Console.Write(modelMsg);
+                    printMsg(modelMsg, Color.CYAN, false);
                     input = Console.ReadLine().Trim();
                     if (isExitProductsLoop(input, quitKeyWord))
                     {
@@ -161,12 +160,14 @@ namespace Asset_Tracking
                 }
 
                 //add office name or exit
-                wrongInput = true;
-                while (wrongInput)
+
+                if (!exitProductLoop)
                 {
-                    if (!exitProductLoop)
+                    wrongInput = true;
+                    while (wrongInput)
                     {
                         printMsg(officeMsg, Color.CYAN);
+                        printMsg(categoryMsg, Color.WHITE);
                         input = Console.ReadLine().Trim();
                         if (isExitProductsLoop(input, quitKeyWord))
                         {
@@ -192,30 +193,32 @@ namespace Asset_Tracking
                             }
                         }
                     }
-                    else
-                    {
-                        wrongInput = false;
-                    }
                 }
+                else
+                {
+                    wrongInput = false;
+                }
+
 
                 //add purchase date or exit
                 if (!exitProductLoop)
                 {
-                    printMsg(dateMsg, Color.CYAN);
-                    input = Console.ReadLine().Trim();
-                    if (isExitProductsLoop(input, quitKeyWord))
+                    wrongInput = true;
+                    while (wrongInput)
                     {
-                        exitProductLoop = true;
-                    }
-                    else if (!exitProductLoop)
-                    {
-                        bool repeat = true;
-                        while (repeat)
+                        printMsg(dateMsg, Color.CYAN, false);
+                        input = Console.ReadLine().Trim();
+                        if (isExitProductsLoop(input, quitKeyWord))
                         {
+                            exitProductLoop = true;
+                        }
+                        else if (!exitProductLoop)
+                        {
+
                             try
                             {
                                 purchased = DateTime.Parse(input);
-                                repeat = false;
+                                wrongInput = false;
                             }
                             catch (ArgumentNullException e)
                             {
@@ -232,21 +235,22 @@ namespace Asset_Tracking
                 //add price or exit
                 if (!exitProductLoop)
                 {
-                    Console.Write(priceMsg);
-                    input = Console.ReadLine().Trim();
-                    if (isExitProductsLoop(input, quitKeyWord))
+                    wrongInput = true;
+                    while (wrongInput)
                     {
-                        exitProductLoop = true;
-                    }
-                    else if (!exitProductLoop)
-                    {
-                        bool repeat = true;
-                        while (repeat)
+                        printMsg(priceMsg, Color.CYAN, false);
+                        input = Console.ReadLine().Trim();
+                        if (isExitProductsLoop(input, quitKeyWord))
                         {
+                            exitProductLoop = true;
+                        }
+                        else if (!exitProductLoop)
+                        {
+
                             try
                             {
                                 priceUSD = decimal.Parse(input);
-                                repeat = false;
+                                wrongInput = false;
                             }
                             catch (ArgumentNullException e)
                             {
@@ -274,7 +278,7 @@ namespace Asset_Tracking
                 }
 
             }
-            exitProductLoop = false;
+            exitProductLoop = true;
             loopType = LoopType.SHOW_PRODUCT_TABLE;
         }
 
@@ -302,7 +306,7 @@ namespace Asset_Tracking
             switch (color)
             {
                 case Color.WHITE:
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.White;
                     break;
                 case Color.GREEN:
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -315,7 +319,7 @@ namespace Asset_Tracking
                     break;
                 case Color.CYAN:
                     Console.ForegroundColor = ConsoleColor.Cyan;
-                     break;
+                    break;
                 case Color.RED:
                     Console.ForegroundColor = ConsoleColor.Red;
                     break;
