@@ -8,6 +8,7 @@ namespace Asset_Tracking
 {
     internal class Phone : Item
     {
+        public Phone() { }
         public Phone(String brand, String model, String office, DateTime purchased, Decimal priceUSD) : base(brand, model, office, purchased, priceUSD)
         {
             Type = "Phone";

@@ -21,6 +21,7 @@ namespace Asset_Tracking
         internal String Currency { get; set; }
         internal Decimal LocalPrice { get; set; }
 
+        protected Item() { }
         protected Item(string brand, string model, string office, DateTime purchased, Decimal priceUSD)
         {
             Brand = brand;

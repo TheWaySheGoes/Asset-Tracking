@@ -11,16 +11,19 @@ namespace Asset_Tracking
     internal class AssetTracking
     {
         //List of tracking Items in the Database
-        List<Item> items = new List<Item>{new Computer("HP", "Elitebook", "USA", DateTime.Now.Date, decimal.Parse("123,678")), new Phone("HP", "Elitebook", "Spain", DateTime.Now.Date, decimal.Parse("123,678")) };
+        List<Item> items = new List<Item> { new Computer("HP", "Elitebook", "USA", DateTime.Now.Date, decimal.Parse("123,678")), new Phone("HP", "Elitebook", "Spain", DateTime.Now.Date, decimal.Parse("123,678")) };
         static int paddingSize = 12;
-        String exitOrProductMsg = "To enter a new product - follow the steps | To quit - enter: 'Q'";
-        String exitOrProductOrSearchMsg = "To enter a new product enter 'P' | To search for product enter 'S' | To quit - enter: 'Q'";
+        String exitOrTypeMsg = "Enter Type\n - 1 for Computer\n - 2 for Phone\n - Q for Exit";
+        String exitOrProductOrSearchMsg = "To enter a new product enter 'P' | To quit - enter: 'Q'";
         String categoryMsg = "Enter Category: ";
-        String productMsg = "Enter Product: ";
+        String brandMsg = "Enter Brand: ";
+        String dateMsg = "Enter purchase date in format dd-MM-yyyy: ";
+        String officeMsg = "Enter office\n - 1 for Spain\n - 2 for Sweden\n - 3 for USA";
+        String modelMsg = "Enter Model: ";
         String priceMsg = "Enter Price: ";
         String priceWholeNumberMsg = "Price must be a number ex. 1234,5";
         String tableHeader = "------------------------------------------------------------";
-        String tableCategories = "Type".PadRight(paddingSize) + "Brand".PadRight(paddingSize) + "Model".PadRight(paddingSize) + "Office".PadRight(paddingSize) + "Purchased".PadRight(paddingSize) + 
+        String tableCategories = "Type".PadRight(paddingSize) + "Brand".PadRight(paddingSize) + "Model".PadRight(paddingSize) + "Office".PadRight(paddingSize) + "Purchased".PadRight(paddingSize) +
             "Price USD".PadRight(paddingSize) + "Currency".PadRight(paddingSize) + "Local Price".PadRight(paddingSize);
         String tableFooter = "------------------------------------------------------------";
         bool exitProductLoop = false;
@@ -41,11 +44,6 @@ namespace Asset_Tracking
             {
                 switch (loopType)
                 {
-                    case LoopType.SEARCH:
-                        {
-                            searchLoop();
-                            break;
-                        }
                     case LoopType.PRODUCTS:
                         {
                             addProductLoop();
@@ -79,10 +77,6 @@ namespace Asset_Tracking
             {
                 loopType = LoopType.PRODUCTS;
             }
-            else if (input == searchKeyWord)
-            {
-                loopType = LoopType.SEARCH;
-            }
             else if (input == quitKeyWord)
             {
                 exitMainLoop = true;
@@ -98,27 +92,20 @@ namespace Asset_Tracking
         {
             while (!exitProductLoop)
             {
-                String category = null;
-                String product = null;
-                decimal price = 0;
+                Item type = null;
+                String brand = null;
+                String model = null;
+                String office = null;
+                DateTime purchased = new DateTime();
+                decimal priceUSD = 0;
+                String input = null;
 
-                //add category or exit
-                printMsg(exitOrProductMsg, Color.YELLOW);
-                Console.Write(categoryMsg);
-                String input = Console.ReadLine().Trim();
-                if (isExitProductsLoop(input, quitKeyWord))
+                //add type or exit
+                bool wrongInput = true;
+                while (wrongInput)
                 {
-                    exitProductLoop = true;
-                }
-                else if (!exitProductLoop)
-                {
-                    category = input;
-                }
-
-                //add product name or exit
-                if (!exitProductLoop)
-                {
-                    Console.Write(productMsg);
+                    printMsg(exitOrTypeMsg, Color.YELLOW);
+                    Console.Write(categoryMsg);
                     input = Console.ReadLine().Trim();
                     if (isExitProductsLoop(input, quitKeyWord))
                     {
@@ -126,8 +113,120 @@ namespace Asset_Tracking
                     }
                     else if (!exitProductLoop)
                     {
-                        product = input;
 
+                        switch (input)
+                        {
+                            case "1":
+                                type = new Computer();
+                                wrongInput = false;
+                                break;
+                            case "2":
+                                type = new Phone();
+                                wrongInput = false;
+                                break;
+                        }
+                    }
+                }
+                //add brand name or exit
+                if (!exitProductLoop)
+                {
+                    Console.Write(brandMsg);
+                    input = Console.ReadLine().Trim();
+                    if (isExitProductsLoop(input, quitKeyWord))
+                    {
+                        exitProductLoop = true;
+                    }
+                    else if (!exitProductLoop)
+                    {
+                        brand = input;
+
+                    }
+                }
+
+                //add model name or exit
+                if (!exitProductLoop)
+                {
+                    Console.Write(modelMsg);
+                    input = Console.ReadLine().Trim();
+                    if (isExitProductsLoop(input, quitKeyWord))
+                    {
+                        exitProductLoop = true;
+                    }
+                    else if (!exitProductLoop)
+                    {
+                        model = input;
+
+                    }
+                }
+
+                //add office name or exit
+                wrongInput = true;
+                while (wrongInput)
+                {
+                    if (!exitProductLoop)
+                    {
+                        Console.Write(officeMsg);
+                        input = Console.ReadLine().Trim();
+                        if (isExitProductsLoop(input, quitKeyWord))
+                        {
+                            exitProductLoop = true;
+                        }
+                        else if (!exitProductLoop)
+                        {
+                            switch (input)
+                            {
+                                case "1":
+                                    office = "Spain";
+                                    wrongInput = false;
+                                    break;
+                                case "2":
+                                    office = "Sweden";
+                                    wrongInput = false;
+                                    break;
+                                case "3":
+                                    office = "USA";
+                                    wrongInput = false;
+                                    break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        wrongInput = false;
+                    }
+                }
+
+                //add purchase date or exit
+                if (!exitProductLoop)
+                {
+                    Console.Write(dateMsg);
+                    input = Console.ReadLine().Trim();
+                    if (isExitProductsLoop(input, quitKeyWord))
+                    {
+                        exitProductLoop = true;
+                    }
+                    else if (!exitProductLoop)
+                    {
+                        bool repeat = true;
+                        while (repeat)
+                        {
+                            try
+                            {
+                                purchased = DateTime.Parse(input);
+                            }
+                            catch (ArgumentNullException e)
+                            {
+                                printMsg("Date cant be empty", Color.RED);
+                            }
+                            catch (FormatException e)
+                            {
+                                printMsg("Date has wrong format", Color.RED);
+                            }
+                            finally
+                            {
+                                repeat = false;
+                            }
+                        }
                     }
                 }
 
@@ -142,31 +241,41 @@ namespace Asset_Tracking
                     }
                     else if (!exitProductLoop)
                     {
-                        while (!decimal.TryParse(input, out decimal number))
+                        bool repeat = true;
+                        while (repeat)
                         {
-                            printMsg(priceWholeNumberMsg, Color.RED);
-                            input = Console.ReadLine().Trim();
-                            if (isExitProductsLoop(input, quitKeyWord))
+                            try
                             {
-                                exitProductLoop = true;
-                                break;
+                                priceUSD = decimal.Parse(input);
                             }
-                        }
-                        if (!exitProductLoop)
-                        {
-                            price = decimal.Parse(input);
+                            catch (ArgumentNullException e)
+                            {
+                                printMsg("Price cant be empty", Color.RED);
+                            }
+                            catch (FormatException e)
+                            {
+                                printMsg("Price has wrong format", Color.RED);
+                            }
+                            catch (OverflowException e)
+                            {
+                                printMsg("Price is to big", Color.RED);
+                            }
+                            finally
+                            {
+                                repeat = false;
+                            }
                         }
                     }
                 }
-                /*
+
                 if (!exitProductLoop)
                 {
-                    Product tempProduct = new Product();
-                    tempProduct.Category = category;
-                    tempProduct.ProductName = product;
-                    tempProduct.Price = price;
-                    products.Add(tempProduct);
-                }*/
+                    type.Brand = brand;
+                    type.Model = model;
+                    type.Office = office;
+                    type.Purchased = purchased;
+                    type.PriceUSD = priceUSD;
+                }
 
             }
             exitProductLoop = false;
@@ -226,55 +335,6 @@ namespace Asset_Tracking
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
-
-
-        /*
-         * shows the product table highlighting the searched product
-         */
-        private void searchLoop()
-        {
-            while (!exitSearchLoop)
-            {
-                Console.Write(productMsg);
-                String input = Console.ReadLine();
-
-                printMsg(tableHeader);
-                printMsg(tableCategories, Color.GREEN);
-                /*products.OrderBy(product => product.Price).ToList().ForEach(product =>
-                {
-                    if (product.ProductName == input)
-                    {
-                        printMsg(product.toString(), Color.CYAN);
-                    }
-                    else
-                    {
-                        printMsg(product.toString());
-                    }
-                });*/
-                printMsg(tableFooter);
-                printMsg(exitOrProductOrSearchMsg, Color.BLUE);
-                input = Console.ReadLine();
-
-                if (input == showProductsKeyWord)
-                {
-                    loopType = LoopType.PRODUCTS;
-                    exitSearchLoop = true;
-                }
-                else if (input == searchKeyWord)
-                {
-                    loopType = LoopType.SEARCH;
-                    exitSearchLoop = false;
-                }
-                else if (input == quitKeyWord)
-                {
-                    exitSearchLoop = true;
-                    exitMainLoop = true;
-                }
-                //TODO exit
-                else { }
-            }
-            exitSearchLoop = false;
-        }
     }
 }
 
@@ -290,7 +350,6 @@ enum Color
 
 enum LoopType
 {
-    SEARCH,
     PRODUCTS,
     SHOW_PRODUCT_TABLE
 }
